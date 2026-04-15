@@ -481,6 +481,20 @@ def render_navigation():
     
     st.markdown('</div>', unsafe_allow_html=True)
 
+# ------------------ FOOTER ------------------
+def render_footer():
+    """Render footer with authors information"""
+    st.markdown("""
+    <div style="background: rgba(251, 146, 60, 0.1); border: 2px solid #fb923c; border-radius: 15px; padding: 1.5rem; margin-top: 3rem; margin-bottom: 2rem; text-align: center; box-shadow: 0 4px 15px rgba(251, 146, 60, 0.3);">
+        <p style="color: #fb923c; margin: 0; font-size: 1.1rem; font-weight: bold;">
+            <strong>Created by:</strong> Pallavi | Adriza | Aastha | Dhanush
+        </p>
+        <p style="color: #fb923c; margin: 1rem 0 0 0; font-size: 0.9rem;">
+            Smart Logistics Dashboard © 2026
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
 # ------------------ HEADER ------------------
 def render_header():
     """Render main header with banner"""
@@ -595,6 +609,9 @@ def render_dashboard(df, model, future_predictions):
         
         st.plotly_chart(fig, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Add footer
+    render_footer()
 
 # ------------------ ANALYTICS PAGE ------------------
 def render_analytics(df):
@@ -671,6 +688,9 @@ def render_analytics(df):
         
         st.plotly_chart(fig, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Add footer
+    render_footer()
 
 # ------------------ MAP VIEW PAGE ------------------
 def render_map_view(df):
@@ -834,9 +854,11 @@ def render_map_view(df):
         """, unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
     
-    st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    # Add footer
+    render_footer()
 
 # ------------------ ACTIVITY PAGE ------------------
 def render_activity_page():
@@ -878,6 +900,9 @@ def render_activity_page():
         """, unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Add footer
+    render_footer()
 
 # ------------------ AI INSIGHTS PAGE ------------------
 def render_ai_insights_page(df, model, future_predictions):
@@ -951,6 +976,9 @@ def render_ai_insights_page(df, model, future_predictions):
     st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Add footer
+    render_footer()
 
 # ------------------ SDG PAGE ------------------
 def render_sdg_page():
@@ -1083,6 +1111,9 @@ def render_sdg_page():
     
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)  # Close main glass container
+    
+    # Add footer
+    render_footer()
 
 # ------------------ MAIN APP ------------------
 def main():
