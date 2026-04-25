@@ -459,7 +459,7 @@ def render_sidebar():
     
     # Export button with dark green styling
     st.sidebar.markdown('<div style="margin-top: 1rem;">', unsafe_allow_html=True)
-    if st.sidebar.button("Export Data", width='stretch'):
+    if st.sidebar.button("Export Data", use_container_width=True):
         st.sidebar.success("Data exported successfully!")
     st.sidebar.markdown('</div>', unsafe_allow_html=True)
     
@@ -481,7 +481,7 @@ def render_navigation():
     for i, page in enumerate(pages):
         with cols[i]:
             button_type = "primary" if st.session_state.page == page else "secondary"
-            if st.button(page, key=f"nav_{page}", width='stretch', type=button_type):
+            if st.button(page, key=f"nav_{page}", use_container_width=True, type=button_type):
                 st.session_state.page = page
                 st.rerun()
     
@@ -513,7 +513,7 @@ def render_header():
     
     # Banner image
     try:
-        st.image("https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&h=300&fit=crop", width='stretch')
+        st.image("https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&h=300&fit=crop", use_column_width=True)
     except:
         pass
 
@@ -587,7 +587,7 @@ def render_dashboard(df, model, future_predictions):
             margin=dict(l=0, r=0, t=0, b=0)
         )
         
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
@@ -613,7 +613,7 @@ def render_dashboard(df, model, future_predictions):
             margin=dict(l=0, r=0, t=0, b=0)
         )
         
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
     # Add footer
@@ -644,7 +644,7 @@ def render_analytics(df):
             font_color='white'
         )
         
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
     else:
         st.warning("No data available for heatmap with current filters")
     
@@ -671,7 +671,7 @@ def render_analytics(df):
             font_color='white'
         )
         
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
@@ -692,7 +692,7 @@ def render_analytics(df):
             font_color='white'
         )
         
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
     
     # Add footer
@@ -753,7 +753,7 @@ def render_map_view(df):
                 mapbox_accesstoken=MAPBOX_TOKEN
             )
             
-            st.plotly_chart(fig, width='stretch')
+            st.plotly_chart(fig, use_container_width=True)
             st.success("India choropleth map loaded successfully!")
             
         else:
@@ -792,7 +792,7 @@ def render_map_view(df):
             mapbox_accesstoken=MAPBOX_TOKEN
         )
         
-        st.plotly_chart(fig, width='stretch')
+        st.plotly_chart(fig, use_container_width=True)
     
         
     # Add demand score legend
@@ -971,7 +971,7 @@ def render_ai_insights_page(df, model, future_predictions):
         font_color='white'
     )
     
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
     
     # AI Recommendations
@@ -999,7 +999,7 @@ def render_sdg_page():
         col1, col2, col3 = st.columns([1, 6, 1])
         with col2:
             st.image("https://www.innovationnewsnetwork.com/wp-content/uploads/2025/11/shutterstock_2397267413-696x391.jpg", 
-                    caption="Sustainable Supply Chain Operations", width='stretch')
+                    caption="Sustainable Supply Chain Operations", use_column_width=True)
     except:
         pass
     
@@ -1012,7 +1012,7 @@ def render_sdg_page():
         col1, col2, col3 = st.columns([1, 4, 1])
         with col2:
             st.image("https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=300&fit=crop", 
-                    caption="Industry & Innovation", width='stretch')
+                    caption="Industry & Innovation", use_column_width=True)
     except:
         pass
     
@@ -1056,7 +1056,7 @@ def render_sdg_page():
         col1, col2, col3 = st.columns([1, 4, 1])
         with col2:
             st.image("https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&h=300&fit=crop", 
-                    caption="Responsible Consumption", width='stretch')
+                    caption="Responsible Consumption", use_column_width=True)
     except:
         pass
     
