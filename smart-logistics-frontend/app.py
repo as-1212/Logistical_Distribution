@@ -9,7 +9,13 @@ import json
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 import requests
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+MAPBOX_TOKEN = os.getenv("MAPBOX_TOKEN")
+if MAPBOX_TOKEN:
+    px.set_mapbox_access_token(MAPBOX_TOKEN)
 # ------------------ CONFIG ------------------
 st.set_page_config(
     layout="wide", 
@@ -438,14 +444,14 @@ def render_sidebar():
     
     # Filters with dark green styling
     st.sidebar.markdown('<div style="color: #064E3B; font-weight: bold; margin-bottom: 0.5rem;">Product</div>', unsafe_allow_html=True)
-    product = st.sidebar.selectbox("", ["All", "Product_A", "Product_B", "Product_C"])
+    product = st.sidebar.selectbox("Product", ["All", "Product_A", "Product_B", "Product_C"], label_visibility="collapsed")
     
     st.sidebar.markdown('<div style="color: #064E3B; font-weight: bold; margin-bottom: 0.5rem; margin-top: 1rem;">State</div>', unsafe_allow_html=True)
-    state = st.sidebar.selectbox("", ["All"] + ['Maharashtra', 'Tamil Nadu', 'Karnataka', 'Gujarat', 'Delhi', 'UP', 'West Bengal'])
+    state = st.sidebar.selectbox("State", ["All"] + ['Maharashtra', 'Tamil Nadu', 'Karnataka', 'Gujarat', 'Delhi', 'UP', 'West Bengal'], label_visibility="collapsed")
     
     # Date range with dark green styling
     st.sidebar.markdown('<div style="color: #064E3B; font-weight: bold; margin-bottom: 0.5rem; margin-top: 1rem;">Date Range</div>', unsafe_allow_html=True)
-    date_range = st.sidebar.date_input("", value=[datetime(2024, 1, 1), datetime(2024, 12, 31)])
+    date_range = st.sidebar.date_input("Date Range", value=[datetime(2024, 1, 1), datetime(2024, 12, 31)], label_visibility="collapsed")
     
     # Auto-refresh with dark green styling
     st.sidebar.markdown('<div style="color: #064E3B; font-weight: bold; margin-bottom: 0.5rem; margin-top: 1rem;">Settings</div>', unsafe_allow_html=True)
@@ -453,7 +459,7 @@ def render_sidebar():
     
     # Export button with dark green styling
     st.sidebar.markdown('<div style="margin-top: 1rem;">', unsafe_allow_html=True)
-    if st.sidebar.button("Export Data", use_container_width=True):
+    if st.sidebar.button("Export Data", width='stretch'):
         st.sidebar.success("Data exported successfully!")
     st.sidebar.markdown('</div>', unsafe_allow_html=True)
     
@@ -475,7 +481,7 @@ def render_navigation():
     for i, page in enumerate(pages):
         with cols[i]:
             button_type = "primary" if st.session_state.page == page else "secondary"
-            if st.button(page, key=f"nav_{page}", use_container_width=True, type=button_type):
+            if st.button(page, key=f"nav_{page}", width='stretch', type=button_type):
                 st.session_state.page = page
                 st.rerun()
     
@@ -507,7 +513,7 @@ def render_header():
     
     # Banner image
     try:
-        st.image("https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&h=300&fit=crop", use_container_width=True)
+        st.image("https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200&h=300&fit=crop", width='stretch')
     except:
         pass
 
@@ -743,7 +749,8 @@ def render_map_view(df):
                 height=600,
                 paper_bgcolor='rgba(0,0,0,0)',
                 font_color='white',
-                margin=dict(l=0, r=0, t=0, b=0)
+                margin=dict(l=0, r=0, t=0, b=0),
+                mapbox_accesstoken=MAPBOX_TOKEN
             )
             
             st.plotly_chart(fig, width='stretch')
@@ -781,7 +788,8 @@ def render_map_view(df):
                 title="Demand Score",
                 tickvals=[0, 50, 100],
                 ticktext=["Low", "Medium", "High"]
-            )
+            ),
+            mapbox_accesstoken=MAPBOX_TOKEN
         )
         
         st.plotly_chart(fig, width='stretch')

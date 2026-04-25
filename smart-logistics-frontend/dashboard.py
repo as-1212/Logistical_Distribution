@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import random
 from dateutil.relativedelta import relativedelta
+from map_utils import create_india_map, INDIA_STATE_COORDINATES
 
 # Set page configuration
 st.set_page_config(
@@ -263,30 +264,10 @@ def generate_activity_feed():
 
 # Create India map data
 def create_india_map_data(df):
-    # Simplified state coordinates for demonstration
-    state_coords = {
-        'Maharashtra': [19.0760, 72.8777],
-        'Gujarat': [23.2156, 72.6369],
-        'Karnataka': [12.9716, 77.5946],
-        'Tamil Nadu': [11.1271, 78.6569],
-        'Uttar Pradesh': [26.8467, 80.9462],
-        'Rajasthan': [26.9124, 75.7873],
-        'Madhya Pradesh': [22.9734, 78.6569],
-        'West Bengal': [22.9868, 87.8550],
-        'Andhra Pradesh': [15.9129, 79.7400],
-        'Telangana': [17.3850, 78.4867],
-        'Kerala': [10.8505, 76.2711],
-        'Punjab': [31.1471, 75.3412],
-        'Haryana': [29.0588, 76.0856],
-        'Delhi': [28.7041, 77.1025],
-        'Bihar': [25.0961, 85.3131],
-        'Odisha': [20.9517, 85.0985],
-        'Assam': [26.2006, 92.9376]
-    }
-    
+    # Use coordinates from map_utils for accuracy
     map_data = df.groupby('State')['Demand_Score'].mean().reset_index()
-    map_data['lat'] = map_data['State'].map(lambda x: state_coords.get(x, [20, 77])[0])
-    map_data['lon'] = map_data['State'].map(lambda x: state_coords.get(x, [20, 77])[1])
+    map_data['lat'] = map_data['State'].map(lambda x: INDIA_STATE_COORDINATES.get(x, [20, 77])[0])
+    map_data['lon'] = map_data['State'].map(lambda x: INDIA_STATE_COORDINATES.get(x, [20, 77])[1])
     
     return map_data
 
@@ -354,18 +335,19 @@ def main():
     
     with col1:
         st.markdown('<div class="filter-label">Product</div>', unsafe_allow_html=True)
-        selected_product = st.selectbox('', ['All'] + list(df['Product'].unique()))
+        selected_product = st.selectbox('Product', ['All'] + list(df['Product'].unique()), label_visibility="collapsed")
     
     with col2:
         st.markdown('<div class="filter-label">State</div>', unsafe_allow_html=True)
-        selected_state = st.selectbox('', ['All'] + list(df['State'].unique()))
+        selected_state = st.selectbox('State', ['All'] + list(df['State'].unique()), label_visibility="collapsed")
     
     with col3:
         st.markdown('<div class="filter-label">Date Range</div>', unsafe_allow_html=True)
         date_range = st.date_input(
-            '',
+            'Date Range',
             value=[datetime.now() - timedelta(days=7), datetime.now()],
-            max_value=datetime.now()
+            max_value=datetime.now(),
+            label_visibility="collapsed"
         )
     
     st.markdown('</div>', unsafe_allow_html=True)
@@ -403,7 +385,7 @@ def main():
             paper_bgcolor='white'
         )
         
-        st.plotly_chart(fig_orders, use_container_width=True)
+        st.plotly_chart(fig_orders, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
         
         # Revenue Trend
@@ -428,7 +410,7 @@ def main():
             paper_bgcolor='white'
         )
         
-        st.plotly_chart(fig_revenue, use_container_width=True)
+        st.plotly_chart(fig_revenue, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
@@ -452,7 +434,7 @@ def main():
             paper_bgcolor='white'
         )
         
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
         
         # Demand Heatmap
@@ -479,54 +461,39 @@ def main():
             paper_bgcolor='white'
         )
         
-        st.plotly_chart(fig_heatmap, use_container_width=True)
+        st.plotly_chart(fig_heatmap, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
     
     # India Map Section
     st.markdown('<div class="chart-container">', unsafe_allow_html=True)
     st.subheader("🗺️ India Demand Distribution")
     
-    fig_map = px.scatter_mapbox(
-        map_data,
-        lat='lat',
-        lon='lon',
-        size='Demand_Score',
-        color='Demand_Score',
-        hover_name='State',
-        color_continuous_scale=['#10B981', '#F59E0B', '#EF4444', '#0A6ED1'],
-        size_max=50,
-        zoom=4,
-        center={'lat': 20, 'lon': 77},
-        mapbox_style='open-street-map',
-        template='plotly_white'
-    )
-    
-    fig_map.update_layout(
-        height=400,
-        margin=dict(l=20, r=20, t=40, b=20),
-        paper_bgcolor='white'
-    )
-    
-    st.plotly_chart(fig_map, use_container_width=True)
+    # Use improved map visualization
+    fig_map = create_india_map(map_data, title="Regional Demand Score Analysis")
+    st.plotly_chart(fig_map, width='stretch')
     
     # Demand Score Legend
     st.markdown("""
-    <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem;">
+    <div style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; flex-wrap: wrap;">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <div style="width: 20px; height: 20px; background: #10B981; border-radius: 50%;"></div>
-            <span>Balanced (0-50)</span>
+            <div style="width: 20px; height: 20px; background: #EF4444; border-radius: 50%; border: 2px solid white;"></div>
+            <span><b>Critical (>3.5)</b></span>
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <div style="width: 20px; height: 20px; background: #F59E0B; border-radius: 50%;"></div>
-            <span>Moderate (50-80)</span>
+            <div style="width: 20px; height: 20px; background: #F97316; border-radius: 50%; border: 2px solid white;"></div>
+            <span><b>High (2.5-3.5)</b></span>
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <div style="width: 20px; height: 20px; background: #EF4444; border-radius: 50%;"></div>
-            <span>High Demand (80-120)</span>
+            <div style="width: 20px; height: 20px; background: #F59E0B; border-radius: 50%; border: 2px solid white;"></div>
+            <span><b>Moderate (1.5-2.5)</b></span>
         </div>
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <div style="width: 20px; height: 20px; background: #0A6ED1; border-radius: 50%;"></div>
-            <span>Excess (>120)</span>
+            <div style="width: 20px; height: 20px; background: #60A5FA; border-radius: 50%; border: 2px solid white;"></div>
+            <span><b>Low (0.5-1.5)</b></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div style="width: 20px; height: 20px; background: #D1D5DB; border-radius: 50%; border: 2px solid white;"></div>
+            <span><b>None (<0.5)</b></span>
         </div>
     </div>
     """, unsafe_allow_html=True)

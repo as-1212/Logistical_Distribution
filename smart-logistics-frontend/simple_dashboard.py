@@ -325,7 +325,7 @@ def main():
         fig_orders = go.Figure(data=[go.Bar(x=monthly_orders['Month'], y=monthly_orders['Orders'], marker_color='#0A6ED1')])
         fig_orders.update_layout(template='plotly_white', height=300, margin=dict(l=20, r=20, t=40, b=20))
         
-        st.plotly_chart(fig_orders, use_container_width=True)
+        st.plotly_chart(fig_orders, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
         
         # Revenue Trend
@@ -338,7 +338,7 @@ def main():
         fig_revenue = go.Figure(data=[go.Scatter(x=monthly_revenue['Month'], y=monthly_revenue['Revenue'], line=dict(color='#10B981'))])
         fig_revenue.update_layout(template='plotly_white', height=300, margin=dict(l=20, r=20, t=40, b=20))
         
-        st.plotly_chart(fig_revenue, use_container_width=True)
+        st.plotly_chart(fig_revenue, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
@@ -358,7 +358,7 @@ def main():
         
         fig_pie.update_layout(height=300, margin=dict(l=20, r=20, t=40, b=20))
         
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
         
         # Demand Heatmap
@@ -381,7 +381,7 @@ def main():
         
         fig_heatmap.update_layout(height=300, margin=dict(l=20, r=20, t=40, b=20))
         
-        st.plotly_chart(fig_heatmap, use_container_width=True)
+        st.plotly_chart(fig_heatmap, width='stretch')
         st.markdown('</div>', unsafe_allow_html=True)
     
     # India Map Section
@@ -405,7 +405,7 @@ def main():
     
     fig_map.update_layout(height=400, margin=dict(l=20, r=20, t=40, b=20))
     
-    st.plotly_chart(fig_map, use_container_width=True)
+    st.plotly_chart(fig_map, width='stretch')
     
     # Demand Score Legend
     st.markdown("""

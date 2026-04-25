@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: smart-logistics-backend
+    runtime: node
+    plan: free
+    startCommand: npm run start:backend
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: BACKEND_PORT
+        value: 8000
+      - key: PYTHON_EXECUTABLE
+        value: python3
+
+  - type: web
+    name: smart-logistics-dashboard
+    runtime: python
+    plan: free
+    startCommand: streamlit run smart-logistics-frontend/app.py
+    envVars:
+      - key: STREAMLIT_SERVER_PORT
+        value: 3001
+      - key: STREAMLIT_SERVER_HEADLESS
+        value: true
+      - key: STREAMLIT_SERVER_ENABLECORS
+        value: true
+
+databases:
+  - name: smart-logistics-db
+    plan: free
